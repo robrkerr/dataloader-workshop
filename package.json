@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "main": "pizza.js",
   "author": "Robert Kerr <robrkerr@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "dataloader": "^1.4.0"
+  }
 }
