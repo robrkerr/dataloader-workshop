@@ -1,0 +1,27 @@
+const { deepLog, readCsvFile } = require('./utils')
+
+const loadPizzaToppings = (pizzaId) => Promise.all([
+  readCsvFile('pizza_toppings.csv'),
+  readCsvFile('toppings.csv'),
+]).then(([pizzaToppings, toppings]) => {
+  return pizzaToppings
+    .filter((pizzaTopping) => pizzaTopping.pizza_id === pizzaId)
+    .map((pizzaTopping) => pizzaTopping.topping_id)
+    .map((toppingId) => toppings.filter((topping) => toppingId === topping.id)[0])
+})
+
+readCsvFile('pizzas.csv')
+  .then((pizzas) => {
+    return Promise.all(pizzas.map((pizza) => (
+      loadPizzaToppings(pizza.id).then((toppings) => ({
+        ...pizza,
+        toppings,
+      }))  
+    )))
+  })
+  .then((pizzasWithToppings) => {
+    deepLog(pizzasWithToppings)
+  })
+  .catch((err) => {
+    console.log('Failed to load pizzas:', err)
+  })
